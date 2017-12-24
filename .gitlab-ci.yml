@@ -1,11 +1,8 @@
-image: ubuntu:latest
-
-before_script:
-  - apt-get update -yqq
-  - apt-get install -yqq npm nodejs-legacy git wget
-
 test:
+  image: ubuntu:latest
   script:
+    - apt-get update -yqq
+    - apt-get install -yqq npm nodejs-legacy git wget
     - npm install --unsafe-perm=true
     - npm run lint:sh
     - npm run lint:md
@@ -25,4 +22,6 @@ codequality:
     - docker pull codeclimate/codeclimate
     - docker run --env CODECLIMATE_CODE="$PWD" --volume "$PWD":/code --volume /var/run/docker.sock:/var/run/docker.sock --volume /tmp/cc:/tmp/cc codeclimate/codeclimate analyze -f json > codeclimate.json
   artifacts:
-    paths: [codeclimate.json]
+    paths:
+      - codeclimate.json
+    expire_in: 1 month
